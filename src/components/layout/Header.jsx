@@ -160,6 +160,12 @@ export default function Header() {
     }, 100);
   };
 
+  // New handler for simple navigation from mobile menu
+  const handleSimpleNavigation = (path) => {
+    navigate(path);
+    setIsMenuOpen(false);
+  };
+
   return (
     <div className="w-full bg-white shadow-sm">
       {/* Top utility bar */}
@@ -400,52 +406,60 @@ export default function Header() {
             </form>
           </div>
           
-          {/* Mobile menu items */}
+          {/* Mobile menu items - THIS IS THE FIXED PART */}
           <nav className="px-2 pt-2 pb-4">
             {navItems.map((item) => (
               <div key={item.name} className="mb-1">
-                <button
-                  className="flex items-center justify-between w-full px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg"
-                  onClick={() => item.hasDropdown && handleDropdownToggle(`${item.name}-mobile`)}
-                >
-                  <span className="font-medium">{item.name}</span>
-                  {item.hasDropdown && (
-                    <ChevronRight className={`h-5 w-5 transition-transform ${activeDropdown === `${item.name}-mobile` ? 'rotate-90' : ''}`} />
-                  )}
-                </button>
-                
-                {item.hasDropdown && activeDropdown === `${item.name}-mobile` && (
-                  <div className="mt-1 pl-4">
-                    {item.items.map((subItem, idx) => (
-                      <div
-                        key={idx}
-                        onClick={() => navigateToSection(subItem.path, subItem.anchor)}
-                        className="flex items-center px-3 py-2 text-gray-600 hover:text-teal-600 rounded-lg text-sm cursor-pointer"
-                      >
-                        <div className="h-1 w-1 rounded-full bg-teal-500 mr-2"></div>
-                        {subItem.text}
+                {item.hasDropdown ? (
+                  <>
+                    <button
+                      className="flex items-center justify-between w-full px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg"
+                      onClick={() => handleDropdownToggle(`${item.name}-mobile`)}
+                    >
+                      <span className="font-medium">{item.name}</span>
+                      <ChevronRight className={`h-5 w-5 transition-transform ${activeDropdown === `${item.name}-mobile` ? 'rotate-90' : ''}`} />
+                    </button>
+                    
+                    {activeDropdown === `${item.name}-mobile` && (
+                      <div className="mt-1 pl-4">
+                        {item.items.map((subItem, idx) => (
+                          <div
+                            key={idx}
+                            onClick={() => navigateToSection(subItem.path, subItem.anchor)}
+                            className="flex items-center px-3 py-2 text-gray-600 hover:text-teal-600 rounded-lg text-sm cursor-pointer"
+                          >
+                            <div className="h-1 w-1 rounded-full bg-teal-500 mr-2"></div>
+                            {subItem.text}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
+                  </>
+                ) : (
+                  // This is the key fix - using Link for non-dropdown items
+                  <div
+                    onClick={() => handleSimpleNavigation(item.path)}
+                    className="flex items-center px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium cursor-pointer"
+                  >
+                    {item.name}
                   </div>
                 )}
               </div>
             ))}
             
-            <Link 
-              to="/contact" 
-              className="flex items-center px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
-              onClick={() => setIsMenuOpen(false)}
+            <div
+              onClick={() => handleSimpleNavigation('/contact')}
+              className="flex items-center px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium cursor-pointer"
             >
               Contact
-            </Link>
+            </div>
             
-            <a 
-              href="#"
-              className="flex items-center px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium"
-              onClick={() => setIsMenuOpen(false)}
+            <div
+              onClick={() => handleSimpleNavigation('/careers')}
+              className="flex items-center px-3 py-3 text-gray-700 hover:bg-gray-50 rounded-lg font-medium cursor-pointer"
             >
               We're hiring
-            </a>
+            </div>
           </nav>
           
           {/* Authentication in mobile menu */}

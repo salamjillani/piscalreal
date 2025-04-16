@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
@@ -198,39 +197,36 @@ export default function PropertySearch() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 font-sans text-gray-800">
+    <div className="min-h-screen bg-slate-100 font-sans text-gray-800">
       {/* Header with search bar */}
-      <header className="bg-white shadow-md sticky top-0 z-10">
+      <header className="bg-white backdrop-blur-md bg-opacity-90 shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-         
-          
           <div className="flex-1 max-w-2xl mx-4">
             <div className="relative">
               <input 
                 type="text" 
                 placeholder="Search for location, property type, or keywords..." 
-                className="w-full pl-12 pr-4 py-3 rounded-full border-0 bg-slate-100 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+                className="w-full pl-12 pr-4 py-3 rounded-full border border-slate-200 bg-white focus:bg-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition-all duration-300 shadow-sm"
               />
-              <Search className="absolute left-4 top-3 text-gray-400" />
+              <Search className="absolute left-4 top-3 text-indigo-500" />
             </div>
           </div>
           
           <div className="flex items-center gap-3">
             <button 
               onClick={() => setShowFilters(!showFilters)}
-              className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full transition-all duration-300"
+              className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 ${showFilters ? 'bg-indigo-100 text-indigo-700' : 'bg-white border border-slate-200 text-slate-700 hover:border-indigo-300'}`}
             >
               <Filter size={18} />
               <span className="hidden sm:inline font-medium">Filters</span>
+              {showFilters && <ChevronRight size={16} className="transform rotate-90" />}
             </button>
-            
-          
           </div>
         </div>
       </header>
 
       {/* Filters panel (slide down when active) */}
-      <div className={`bg-white shadow-md transition-all duration-500 overflow-hidden ${showFilters ? 'max-h-96' : 'max-h-0'}`}>
+      <div className={`bg-white shadow-sm transition-all duration-500 overflow-hidden ${showFilters ? 'max-h-96 border-b border-slate-200' : 'max-h-0'}`}>
         <div className="max-w-7xl mx-auto p-6">
           <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
             <div>
@@ -239,7 +235,7 @@ export default function PropertySearch() {
                 name="propertyType"
                 value={filters.propertyType}
                 onChange={handleFilterChange}
-                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
                 <option value="">All Types</option>
                 <option value="house">House</option>
@@ -258,7 +254,7 @@ export default function PropertySearch() {
                 value={filters.minPrice}
                 onChange={handleFilterChange}
                 placeholder="Min Price"
-                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
             
@@ -270,7 +266,7 @@ export default function PropertySearch() {
                 value={filters.maxPrice}
                 onChange={handleFilterChange}
                 placeholder="Max Price"
-                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               />
             </div>
             
@@ -280,7 +276,7 @@ export default function PropertySearch() {
                 name="bedrooms"
                 value={filters.bedrooms}
                 onChange={handleFilterChange}
-                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
                 <option value="">Any</option>
                 <option value="1">1+</option>
@@ -297,7 +293,7 @@ export default function PropertySearch() {
                 name="bathrooms"
                 value={filters.bathrooms}
                 onChange={handleFilterChange}
-                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
                 <option value="">Any</option>
                 <option value="1">1+</option>
@@ -313,7 +309,7 @@ export default function PropertySearch() {
                 name="sort"
                 value={filters.sort}
                 onChange={handleFilterChange}
-                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
               >
                 <option value="newest">Newest</option>
                 <option value="price_asc">Price (Low to High)</option>
@@ -327,13 +323,13 @@ export default function PropertySearch() {
           <div className="mt-6 flex justify-end gap-3">
             <button 
               onClick={resetFilters}
-              className="px-6 py-2 border border-slate-300 rounded-full text-slate-600 hover:bg-slate-100 transition-colors"
+              className="px-6 py-2 border border-slate-200 rounded-full text-slate-600 hover:bg-slate-50 transition-colors"
             >
               Reset
             </button>
             <button 
               onClick={applyFilters}
-              className="px-8 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors shadow-md"
+              className="px-8 py-2 bg-gradient-to-r from-indigo-600 to-indigo-800 text-white rounded-full hover:shadow-lg transition-all duration-300"
             >
               Apply Filters
             </button>
@@ -351,10 +347,10 @@ export default function PropertySearch() {
               Featured Properties
             </h2>
             <div className="flex gap-2">
-              <button className="p-2 rounded-full bg-white shadow-md hover:bg-slate-50 transition-colors">
+              <button className="p-2 rounded-full bg-white shadow-sm border border-slate-200 hover:border-indigo-300 transition-colors">
                 <ChevronLeft size={18} className="text-slate-700" />
               </button>
-              <button className="p-2 rounded-full bg-indigo-600 shadow-md hover:bg-indigo-700 transition-colors">
+              <button className="p-2 rounded-full bg-gradient-to-r from-indigo-600 to-indigo-800 shadow-sm hover:shadow-md transition-all duration-300">
                 <ChevronRight size={18} className="text-white" />
               </button>
             </div>
@@ -362,15 +358,15 @@ export default function PropertySearch() {
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {[1, 2, 3].map(id => (
-              <div key={id} className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
+              <div key={id} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden transform transition-all duration-300 hover:shadow-lg hover:-translate-y-1 group">
                 <div className="relative">
                   <img 
                     src="/property.jpg" 
                     alt="Featured property" 
-                    className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110" 
+                    className="w-full h-52 object-cover transition-transform duration-700 group-hover:scale-110" 
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-indigo-800">
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-indigo-800 shadow-sm">
                     PREMIUM
                   </div>
                   <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
@@ -415,21 +411,21 @@ export default function PropertySearch() {
           <div className="flex-1">
             {/* View toggle and results count */}
             <div className="flex justify-between items-center mb-6">
-              <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm">
+              <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm border border-slate-100">
                 <span className="font-medium text-indigo-800 mr-2">{properties.length}</span> 
                 <span className="text-slate-600">properties found</span>
               </div>
               
-              <div className="flex bg-white rounded-full shadow-sm p-1">
+              <div className="flex bg-white rounded-full shadow-sm border border-slate-100 p-1">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-full ${viewMode === 'grid' ? 'bg-indigo-600 text-white' : 'text-slate-600'}`}
+                  className={`p-2 rounded-full transition-all duration-300 ${viewMode === 'grid' ? 'bg-gradient-to-r from-indigo-600 to-indigo-800 text-white' : 'text-slate-600 hover:text-indigo-600'}`}
                 >
                   <Grid3X3 size={18} />
                 </button>
                 <button
                   onClick={() => setViewMode('map')}
-                  className={`p-2 rounded-full ${viewMode === 'map' ? 'bg-indigo-600 text-white' : 'text-slate-600'}`}
+                  className={`p-2 rounded-full transition-all duration-300 ${viewMode === 'map' ? 'bg-gradient-to-r from-indigo-600 to-indigo-800 text-white' : 'text-slate-600 hover:text-indigo-600'}`}
                 >
                   <Map size={18} />
                 </button>
@@ -442,7 +438,7 @@ export default function PropertySearch() {
                 {loading ? (
                   // Loading skeletons
                   Array(4).fill().map((_, index) => (
-                    <div key={index} className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
+                    <div key={index} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden animate-pulse">
                       <div className="w-full h-52 bg-slate-200"></div>
                       <div className="p-5">
                         <div className="h-6 bg-slate-200 rounded mb-3 w-3/4"></div>
@@ -459,7 +455,7 @@ export default function PropertySearch() {
                   ))
                 ) : (
                   properties.map(property => (
-                    <div key={property.id} className="bg-white rounded-2xl shadow-md overflow-hidden group hover:shadow-xl transition-all duration-300">
+                    <div key={property.id} className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden group hover:shadow-lg transition-all duration-300">
                       <div className="relative">
                         <img 
                           src={property.mainImage} 
@@ -472,12 +468,12 @@ export default function PropertySearch() {
                         
                         {/* Action buttons that appear on hover */}
                         <div className="absolute bottom-4 left-4 right-4 flex justify-between opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
-                          <button className="bg-white/90 backdrop-blur-sm text-slate-800 rounded-full px-4 py-2 text-sm font-medium hover:bg-white transition-colors">
+                          <button className="bg-white/90 backdrop-blur-sm text-slate-800 rounded-full px-4 py-2 text-sm font-medium hover:bg-white transition-colors shadow-sm">
                             View Details
                           </button>
                           <button 
                             onClick={() => toggleFavorite(property.id)}
-                            className="bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors"
+                            className="bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors shadow-sm"
                           >
                             <Heart 
                               size={18} 
@@ -488,19 +484,19 @@ export default function PropertySearch() {
                         
                         {/* Property tag */}
                         {property.tag && (
-                          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-indigo-800">
+                          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-indigo-800 shadow-sm">
                             {property.tag}
                           </div>
                         )}
                         
                         {/* Price tag */}
-                        <div className="absolute top-4 right-4 bg-indigo-600/90 backdrop-blur-sm px-3 py-1 rounded-full text-white font-bold">
+                        <div className="absolute top-4 right-4 bg-gradient-to-r from-indigo-600 to-indigo-800 backdrop-blur-sm px-3 py-1 rounded-full text-white font-bold shadow-sm">
                           ${property.price.toLocaleString()}
                         </div>
                         
                         {/* Virtual tour badge */}
                         {property.virtualTour && (
-                          <div className="absolute bottom-4 right-4 bg-blue-600/90 backdrop-blur-sm flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium text-white">
+                          <div className="absolute bottom-4 right-4 bg-blue-600/90 backdrop-blur-sm flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium text-white shadow-sm">
                             <Image size={12} /> 3D TOUR
                           </div>
                         )}
@@ -561,7 +557,7 @@ export default function PropertySearch() {
                 )}
               </div>
             ) : (
-              <div className="bg-white rounded-2xl shadow-md h-96 flex items-center justify-center">
+              <div className="bg-white rounded-2xl shadow-sm border border-slate-100 h-96 flex items-center justify-center">
                 <p className="text-slate-500 flex flex-col items-center gap-3">
                   <Map size={40} className="text-indigo-300" />
                   Map view will be implemented soon
@@ -571,7 +567,7 @@ export default function PropertySearch() {
             
             {/* Pagination */}
             <div className="mt-10 flex justify-center">
-              <div className="flex items-center gap-2 bg-white rounded-full shadow-md p-1">
+              <div className="flex items-center gap-2 bg-white rounded-full shadow-sm border border-slate-100 p-1">
                 <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-50 transition-colors">
                   <ChevronLeft size={18} />
                 </button>
@@ -580,7 +576,7 @@ export default function PropertySearch() {
                   <button 
                     key={num}
                     className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 
-                    ${currentPage === num ? 'bg-indigo-600 text-white font-medium shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
+                    ${currentPage === num ? 'bg-gradient-to-r from-indigo-600 to-indigo-800 text-white font-medium shadow-sm' : 'text-slate-600 hover:bg-slate-50'}`}
                     onClick={() => setCurrentPage(num)}
                   >
                     {num}
@@ -601,9 +597,9 @@ export default function PropertySearch() {
           {/* Sidebar */}
           <div className="w-full lg:w-80">
             {/* Mortgage calculator */}
-            <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
+            <div className="bg-white rounded-2xl shadow-sm border border-slate-100 p-6 mb-6">
               <h3 className="font-bold text-lg text-slate-800 mb-4 flex items-center">
-                <span className="bg-indigo-600 h-5 w-1 rounded mr-2"></span>
+                <span className="bg-gradient-to-r from-indigo-600 to-indigo-800 h-5 w-1 rounded mr-2"></span>
                 Mortgage Calculator
               </h3>
               
@@ -613,7 +609,7 @@ export default function PropertySearch() {
                   <input 
                     type="text" 
                     value="540,000" 
-                    className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                    className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
                 
@@ -622,7 +618,7 @@ export default function PropertySearch() {
                   <input 
                     type="text" 
                     value="110,000" 
-                    className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                    className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
                 
@@ -631,13 +627,13 @@ export default function PropertySearch() {
                   <input 
                     type="text" 
                     value="4.75" 
-                    className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                    className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                   />
                 </div>
                 
                 <div>
                   <label className="block text-sm text-slate-600 mb-1">Loan term (years)</label>
-                  <select className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 text-slate-800">
+                  <select className="w-full border border-slate-200 bg-white rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-slate-800">
                     <option>30 years</option>
                     <option>25 years</option>
                     <option>20 years</option>
