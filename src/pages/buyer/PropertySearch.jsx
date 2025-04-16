@@ -1,8 +1,10 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { ChevronLeft, ChevronRight, Heart, Info, MapPin, Grid, MapIcon, Star, Mail, Save, Phone, Search } from 'lucide-react';
-import Button from '../../components/common/Button';
-import PropertyList from '../../components/property/PropertyList';
+import { 
+  Heart, Search, Filter, MapPin, Grid3X3, Map, Star, 
+  ChevronLeft, ChevronRight, ArrowRight, Image, Compass, Info
+} from 'lucide-react';
 
 export default function PropertySearch() {
   const location = useLocation();
@@ -10,7 +12,8 @@ export default function PropertySearch() {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [favorites, setFavorites] = useState([]);
-  const [viewMode, setViewMode] = useState('grid'); // grid or map
+  const [viewMode, setViewMode] = useState('grid');
+  const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
     propertyType: '',
     minPrice: '',
@@ -27,7 +30,6 @@ export default function PropertySearch() {
       setFavorites([...favorites, propertyId]);
     }
     
-    // Update the properties with favorite status
     setProperties(prevProperties => 
       prevProperties.map(property => 
         property.id === propertyId 
@@ -38,14 +40,11 @@ export default function PropertySearch() {
   };
 
   useEffect(() => {
-    // Get search query from URL
     const searchParams = new URLSearchParams(location.search);
-    searchParams.get('q'); // Retrieve the query parameter without assigning it to a variable
-
-    // Fetch properties from API (mock data for now)
+    searchParams.get('q');
+    
     setLoading(true);
     
-    // This would be replaced with an actual API call
     setTimeout(() => {
       const mockProperties = [
         {
@@ -64,9 +63,9 @@ export default function PropertySearch() {
           tag: "VIRTUAL TOUR",
           tagColor: "bg-blue-500",
           virtualTour: true,
-          mainImage: '/api/placeholder/400/300',
+          mainImage: '/property.jpg',
           isFavorite: favorites.includes(1),
-          description: "Automated translation\nBeautiful apartment with amazing view of the city skyline. Perfect location, close to all amenities."
+          description: "Beautiful apartment with amazing view of the city skyline. Perfect location, close to all amenities."
         },
         {
           id: 2,
@@ -83,9 +82,9 @@ export default function PropertySearch() {
           isNew: false,
           tag: "WITH APARTMENT",
           tagColor: "bg-green-500",
-          mainImage: '/api/placeholder/400/300',
+          mainImage: '/property.jpg',
           isFavorite: favorites.includes(2),
-          description: "Automated translation\nSpacious family home with 4 bedrooms and a beautiful backyard. Great for growing families."
+          description: "Spacious family home with 4 bedrooms and a beautiful backyard. Great for growing families."
         },
         {
           id: 3,
@@ -100,11 +99,11 @@ export default function PropertySearch() {
           type: "Penthouse",
           status: "For Sale",
           isNew: true,
-          tag: "BEST PRICE IN THE AREA",
+          tag: "BEST PRICE",
           tagColor: "bg-yellow-500",
-          mainImage: '/api/placeholder/400/300',
+          mainImage: '/property.jpg',
           isFavorite: favorites.includes(3),
-          description: "Automated translation\nLuxurious penthouse with breathtaking views of the city. High-end finishes throughout."
+          description: "Luxurious penthouse with breathtaking views of the city. High-end finishes throughout."
         },
         {
           id: 4,
@@ -118,13 +117,13 @@ export default function PropertySearch() {
           type: "Studio",
           status: "For Rent",
           isNew: false,
-          tag: "QUICK OCCUPANCY POSSIBLE",
+          tag: "QUICK MOVE-IN",
           tagColor: "bg-orange-500",
           virtualTour: true,
-          mainImage: '/api/placeholder/400/300',
+          mainImage: '/property.jpg',
           isRental: true,
           isFavorite: favorites.includes(4),
-          description: "Automated translation\nCozy studio apartment in a trendy Brooklyn neighborhood. Perfect for young professionals."
+          description: "Cozy studio apartment in a trendy Brooklyn neighborhood. Perfect for young professionals."
         },
         {
           id: 5,
@@ -141,9 +140,9 @@ export default function PropertySearch() {
           isNew: true,
           tag: "AVAILABLE NOW",
           tagColor: "bg-green-500",
-          mainImage: '/api/placeholder/400/300',
+          mainImage: '/property.jpg',
           isFavorite: favorites.includes(5),
-          description: "Automated translation\nStunning waterfront villa with private beach access. Ultimate luxury living."
+          description: "Stunning waterfront villa with private beach access. Ultimate luxury living."
         },
         {
           id: 6,
@@ -157,12 +156,12 @@ export default function PropertySearch() {
           type: "Loft",
           status: "For Sale",
           isNew: false,
-          tag: "SOLD WITH TAX REBATES",
+          tag: "TAX REBATES",
           tagColor: "bg-purple-500",
           virtualTour: true,
-          mainImage: '/api/placeholder/400/300',
+          mainImage: '/property.jpg',
           isFavorite: favorites.includes(6),
-          description: "Automated translation\nChic downtown loft with high ceilings and original exposed brick. Perfect urban living."
+          description: "Chic downtown loft with high ceilings and original exposed brick. Perfect urban living."
         }
       ];
       
@@ -179,17 +178,6 @@ export default function PropertySearch() {
     });
   };
 
-  const featuredHomes = [
-    { id: 1, location: 'Rosemere', price: '$679,800', image: '/api/placeholder/400/300' },
-    { id: 2, location: 'Gatineau (Aylmer)', price: '$295,000', image: '/api/placeholder/400/300' },
-    { id: 3, location: 'St-Germain-De-Grantham', price: '$582,000', image: '/api/placeholder/400/300' },
-    { id: 4, location: 'St-Lambert', price: '$299,000', image: '/api/placeholder/400/300', tag: 'OPEN HOUSE' },
-    { id: 5, location: 'Mercier', price: '$560,900', image: '/api/placeholder/400/300' },
-    { id: 6, location: 'Gatineau (Gatineau)', price: '$494,999', image: '/api/placeholder/400/300' },
-  ];
-
-  const pageNumbers = [1, 2, 3, 4, 5];
-
   const resetFilters = () => {
     setFilters({
       propertyType: '',
@@ -202,76 +190,56 @@ export default function PropertySearch() {
   };
 
   const applyFilters = () => {
-    // This would typically trigger an API call with the filter parameters
-    console.log("Applying filters:", filters);
-    
-    // For demo purposes, simulate a loading state
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
+      setShowFilters(false);
     }, 800);
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen font-sans text-gray-800">
-    
-      
-      {/* Featured Homes Section */}
-      <div className="bg-white p-6 mb-6 shadow-md rounded-lg max-w-7xl mx-auto">
-        <div className="flex justify-between mb-4 items-center">
-          <h2 className="text-gray-800 font-semibold text-lg flex items-center">
-            <Star className="h-5 w-5 text-yellow-500 mr-2" />
-            Featured Homes
-          </h2>
-          <div className="text-right">
-            <div className="bg-gradient-to-r from-blue-600 to-blue-800 text-white px-4 py-2 rounded-full text-sm font-medium shadow-md hover:shadow-lg transition-all duration-300">
-              Featured builder
+    <div className="min-h-screen bg-slate-50 font-sans text-gray-800">
+      {/* Header with search bar */}
+      <header className="bg-white shadow-md sticky top-0 z-10">
+        <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+         
+          
+          <div className="flex-1 max-w-2xl mx-4">
+            <div className="relative">
+              <input 
+                type="text" 
+                placeholder="Search for location, property type, or keywords..." 
+                className="w-full pl-12 pr-4 py-3 rounded-full border-0 bg-slate-100 focus:bg-white focus:ring-2 focus:ring-indigo-500 transition-all duration-300"
+              />
+              <Search className="absolute left-4 top-3 text-gray-400" />
             </div>
           </div>
-        </div>
-        
-        <div className="relative">
-          <div className="flex overflow-x-auto pb-2 gap-3 scrollbar-hide">
-            {featuredHomes.map(home => (
-              <div key={home.id} className="min-w-max relative group">
-                <div className="overflow-hidden rounded-lg shadow-md transition-all duration-300 transform group-hover:scale-105">
-                  <img src={home.image} alt={home.location} className="w-48 h-32 object-cover transition-transform duration-500 group-hover:scale-110" />
-                </div>
-                {home.tag && (
-                  <div className="absolute top-2 right-2 bg-red-600 text-white text-xs py-1 px-2 rounded-full font-semibold">
-                    {home.tag}
-                  </div>
-                )}
-                <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent text-white p-2 rounded-b-lg">
-                  <div className="text-sm font-medium">{home.location}</div>
-                  <div className="font-bold">{home.price}</div>
-                </div>
-              </div>
-            ))}
+          
+          <div className="flex items-center gap-3">
+            <button 
+              onClick={() => setShowFilters(!showFilters)}
+              className="flex items-center gap-2 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 px-4 py-2 rounded-full transition-all duration-300"
+            >
+              <Filter size={18} />
+              <span className="hidden sm:inline font-medium">Filters</span>
+            </button>
+            
+          
           </div>
-          <button className="absolute left-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg text-blue-600 opacity-80 hover:opacity-100 transition-opacity duration-300">
-            <ChevronLeft size={20} />
-          </button>
-          <button className="absolute right-2 top-1/2 transform -translate-y-1/2 bg-white rounded-full p-2 shadow-lg text-blue-600 opacity-80 hover:opacity-100 transition-opacity duration-300">
-            <ChevronRight size={20} />
-          </button>
         </div>
-      </div>
+      </header>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-     
-
-        {/* Filters */}
-        <div className="bg-white shadow-md rounded-lg p-6 mb-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4">
+      {/* Filters panel (slide down when active) */}
+      <div className={`bg-white shadow-md transition-all duration-500 overflow-hidden ${showFilters ? 'max-h-96' : 'max-h-0'}`}>
+        <div className="max-w-7xl mx-auto p-6">
+          <div className="grid grid-cols-1 md:grid-cols-6 gap-6">
             <div>
-              <label htmlFor="propertyType" className="block text-sm font-medium text-gray-700 mb-1">Property Type</label>
+              <label className="text-sm font-medium text-gray-700 mb-1">Property Type</label>
               <select
-                id="propertyType"
                 name="propertyType"
                 value={filters.propertyType}
                 onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">All Types</option>
                 <option value="house">House</option>
@@ -283,39 +251,36 @@ export default function PropertySearch() {
             </div>
             
             <div>
-              <label htmlFor="minPrice" className="block text-sm font-medium text-gray-700 mb-1">Min Price</label>
+              <label className="text-sm font-medium text-gray-700 mb-1">Min Price</label>
               <input
                 type="number"
-                id="minPrice"
                 name="minPrice"
                 value={filters.minPrice}
                 onChange={handleFilterChange}
                 placeholder="Min Price"
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             
             <div>
-              <label htmlFor="maxPrice" className="block text-sm font-medium text-gray-700 mb-1">Max Price</label>
+              <label className="text-sm font-medium text-gray-700 mb-1">Max Price</label>
               <input
                 type="number"
-                id="maxPrice"
                 name="maxPrice"
                 value={filters.maxPrice}
                 onChange={handleFilterChange}
                 placeholder="Max Price"
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
               />
             </div>
             
             <div>
-              <label htmlFor="bedrooms" className="block text-sm font-medium text-gray-700 mb-1">Bedrooms</label>
+              <label className="text-sm font-medium text-gray-700 mb-1">Bedrooms</label>
               <select
-                id="bedrooms"
                 name="bedrooms"
                 value={filters.bedrooms}
                 onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">Any</option>
                 <option value="1">1+</option>
@@ -327,13 +292,12 @@ export default function PropertySearch() {
             </div>
             
             <div>
-              <label htmlFor="bathrooms" className="block text-sm font-medium text-gray-700 mb-1">Bathrooms</label>
+              <label className="text-sm font-medium text-gray-700 mb-1">Bathrooms</label>
               <select
-                id="bathrooms"
                 name="bathrooms"
                 value={filters.bathrooms}
                 onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="">Any</option>
                 <option value="1">1+</option>
@@ -344,13 +308,12 @@ export default function PropertySearch() {
             </div>
             
             <div>
-              <label htmlFor="sort" className="block text-sm font-medium text-gray-700 mb-1">Sort By</label>
+              <label className="text-sm font-medium text-gray-700 mb-1">Sort By</label>
               <select
-                id="sort"
                 name="sort"
                 value={filters.sort}
                 onChange={handleFilterChange}
-                className="w-full border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full border-0 bg-slate-100 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
               >
                 <option value="newest">Newest</option>
                 <option value="price_asc">Price (Low to High)</option>
@@ -361,140 +324,236 @@ export default function PropertySearch() {
             </div>
           </div>
           
-          <div className="mt-6 flex justify-end">
-            <Button variant="light" className="mr-2" onClick={resetFilters}>
-              Reset Filters
-            </Button>
-            <Button onClick={applyFilters}>
+          <div className="mt-6 flex justify-end gap-3">
+            <button 
+              onClick={resetFilters}
+              className="px-6 py-2 border border-slate-300 rounded-full text-slate-600 hover:bg-slate-100 transition-colors"
+            >
+              Reset
+            </button>
+            <button 
+              onClick={applyFilters}
+              className="px-8 py-2 bg-indigo-600 text-white rounded-full hover:bg-indigo-700 transition-colors shadow-md"
+            >
               Apply Filters
-            </Button>
+            </button>
           </div>
         </div>
+      </div>
 
-        {/* Main Content */}
-        <div className="flex flex-col md:flex-row gap-6">
-          <div className="w-full md:w-3/4">
-            {/* Search Results Header */}
-            <div className="flex justify-between items-center mb-6 bg-white p-4 rounded-lg shadow-md">
-              <div className="text-green-600 font-bold flex items-center">
-                <Search className="mr-2 h-5 w-5" />
-                <span className="text-lg">{properties.length} properties found</span>
+      {/* Main content */}
+      <main className="max-w-7xl mx-auto px-4 py-8">
+        {/* Featured Slider */}
+        <section className="mb-12">
+          <div className="flex justify-between items-center mb-6">
+            <h2 className="text-2xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent flex items-center">
+              <Star className="h-6 w-6 mr-2 text-amber-400" />
+              Featured Properties
+            </h2>
+            <div className="flex gap-2">
+              <button className="p-2 rounded-full bg-white shadow-md hover:bg-slate-50 transition-colors">
+                <ChevronLeft size={18} className="text-slate-700" />
+              </button>
+              <button className="p-2 rounded-full bg-indigo-600 shadow-md hover:bg-indigo-700 transition-colors">
+                <ChevronRight size={18} className="text-white" />
+              </button>
+            </div>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map(id => (
+              <div key={id} className="bg-white rounded-2xl shadow-lg overflow-hidden transform transition-all duration-300 hover:shadow-xl hover:-translate-y-1 group">
+                <div className="relative">
+                  <img 
+                    src="/property.jpg" 
+                    alt="Featured property" 
+                    className="w-full h-48 object-cover transition-transform duration-700 group-hover:scale-110" 
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-indigo-800">
+                    PREMIUM
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 p-4 text-white transform translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                    <h3 className="font-bold text-lg">Luxury Villa in Miami</h3>
+                    <p className="text-white/80 text-sm">Miami Beach, Florida</p>
+                  </div>
+                </div>
+                <div className="p-4">
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-bold text-xl text-indigo-900">$1,250,000</span>
+                    <span className="text-sm font-medium px-3 py-1 bg-green-100 text-green-800 rounded-full">For Sale</span>
+                  </div>
+                  <div className="flex items-center text-sm text-slate-500 mb-3">
+                    <MapPin size={14} className="mr-1" />
+                    <p>Waterfront Estate, Miami Beach</p>
+                  </div>
+                  <div className="flex justify-between pt-3 border-t border-slate-100 text-slate-600">
+                    <div className="flex gap-3">
+                      <span className="flex items-center">
+                        <span className="font-semibold mr-1">4</span> beds
+                      </span>
+                      <span className="flex items-center">
+                        <span className="font-semibold mr-1">3</span> baths
+                      </span>
+                      <span className="flex items-center">
+                        <span className="font-semibold mr-1">3,600</span> ft²
+                      </span>
+                    </div>
+                    <button className="text-rose-500 hover:text-rose-600">
+                      <Heart size={18} />
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="flex space-x-2">
+            ))}
+          </div>
+        </section>
+        
+        {/* Search results and sidebar */}
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Main property listings */}
+          <div className="flex-1">
+            {/* View toggle and results count */}
+            <div className="flex justify-between items-center mb-6">
+              <div className="flex items-center bg-white rounded-full px-4 py-2 shadow-sm">
+                <span className="font-medium text-indigo-800 mr-2">{properties.length}</span> 
+                <span className="text-slate-600">properties found</span>
+              </div>
+              
+              <div className="flex bg-white rounded-full shadow-sm p-1">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-2 rounded-md ${viewMode === 'grid' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}
+                  className={`p-2 rounded-full ${viewMode === 'grid' ? 'bg-indigo-600 text-white' : 'text-slate-600'}`}
                 >
-                  <Grid className="h-5 w-5" />
+                  <Grid3X3 size={18} />
                 </button>
                 <button
                   onClick={() => setViewMode('map')}
-                  className={`p-2 rounded-md ${viewMode === 'map' ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'}`}
+                  className={`p-2 rounded-full ${viewMode === 'map' ? 'bg-indigo-600 text-white' : 'text-slate-600'}`}
                 >
-                  <MapIcon className="h-5 w-5" />
+                  <Map size={18} />
                 </button>
               </div>
             </div>
-
-            {/* Property List or Map View */}
+            
+            {/* Properties grid */}
             {viewMode === 'grid' ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 mb-8">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-6">
                 {loading ? (
-                  // Loading skeleton
-                  Array(6).fill().map((_, index) => (
-                    <div key={index} className="bg-white rounded-xl shadow-md overflow-hidden animate-pulse">
-                      <div className="w-full h-52 bg-gray-200"></div>
-                      <div className="p-4">
-                        <div className="h-6 bg-gray-200 rounded mb-2"></div>
-                        <div className="h-4 bg-gray-200 rounded mb-2 w-3/4"></div>
-                        <div className="h-4 bg-gray-200 rounded mb-3 w-1/2"></div>
-                        <div className="h-16 bg-gray-200 rounded mb-4"></div>
-                        <div className="flex justify-between">
-                          <div className="h-5 bg-gray-200 rounded w-1/3"></div>
-                          <div className="h-5 bg-gray-200 rounded w-1/3"></div>
+                  // Loading skeletons
+                  Array(4).fill().map((_, index) => (
+                    <div key={index} className="bg-white rounded-2xl shadow-md overflow-hidden animate-pulse">
+                      <div className="w-full h-52 bg-slate-200"></div>
+                      <div className="p-5">
+                        <div className="h-6 bg-slate-200 rounded mb-3 w-3/4"></div>
+                        <div className="h-4 bg-slate-200 rounded mb-4 w-1/2"></div>
+                        <div className="flex gap-2 mb-4">
+                          <div className="h-8 bg-slate-200 rounded w-16"></div>
+                          <div className="h-8 bg-slate-200 rounded w-16"></div>
+                          <div className="h-8 bg-slate-200 rounded w-16"></div>
                         </div>
+                        <div className="h-12 bg-slate-200 rounded mb-3"></div>
+                        <div className="h-5 bg-slate-200 rounded w-1/3"></div>
                       </div>
                     </div>
                   ))
                 ) : (
                   properties.map(property => (
-                    <div key={property.id} className="bg-white rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
-                      <div className="relative group">
+                    <div key={property.id} className="bg-white rounded-2xl shadow-md overflow-hidden group hover:shadow-xl transition-all duration-300">
+                      <div className="relative">
                         <img 
                           src={property.mainImage} 
                           alt={property.title} 
-                          className="w-full h-52 object-cover transition-transform duration-500 group-hover:scale-110" 
+                          className="w-full h-64 object-cover transition-transform duration-700 group-hover:scale-110" 
                         />
-                        <button 
-                          className="absolute bottom-3 right-3 bg-white rounded-full p-2 shadow-lg transform transition-transform duration-300 hover:scale-110"
-                          onClick={() => toggleFavorite(property.id)}
-                        >
-                          <Heart 
-                            size={18} 
-                            className={property.isFavorite ? "text-red-500 fill-red-500" : "text-gray-500"} 
-                          />
-                        </button>
                         
+                        {/* Overlay on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                        
+                        {/* Action buttons that appear on hover */}
+                        <div className="absolute bottom-4 left-4 right-4 flex justify-between opacity-0 transform translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                          <button className="bg-white/90 backdrop-blur-sm text-slate-800 rounded-full px-4 py-2 text-sm font-medium hover:bg-white transition-colors">
+                            View Details
+                          </button>
+                          <button 
+                            onClick={() => toggleFavorite(property.id)}
+                            className="bg-white/90 backdrop-blur-sm rounded-full p-2 hover:bg-white transition-colors"
+                          >
+                            <Heart 
+                              size={18} 
+                              className={property.isFavorite ? "text-rose-500 fill-rose-500" : "text-slate-600"} 
+                            />
+                          </button>
+                        </div>
+                        
+                        {/* Property tag */}
                         {property.tag && (
-                          <div className={`absolute top-3 left-3 ${property.tagColor} text-white text-xs px-3 py-1 rounded-full font-semibold shadow-md`}>
+                          <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-xs font-semibold text-indigo-800">
                             {property.tag}
                           </div>
                         )}
                         
+                        {/* Price tag */}
+                        <div className="absolute top-4 right-4 bg-indigo-600/90 backdrop-blur-sm px-3 py-1 rounded-full text-white font-bold">
+                          ${property.price.toLocaleString()}
+                        </div>
+                        
+                        {/* Virtual tour badge */}
                         {property.virtualTour && (
-                          <div className="absolute bottom-3 left-3 bg-blue-600 text-white text-xs px-3 py-1 rounded-full font-semibold flex items-center gap-1 shadow-md">
-                            <span>3D</span> VIRTUAL TOUR
+                          <div className="absolute bottom-4 right-4 bg-blue-600/90 backdrop-blur-sm flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium text-white">
+                            <Image size={12} /> 3D TOUR
                           </div>
                         )}
                       </div>
                       
-                      <div className="p-4">
-                        <div className="flex justify-between mb-2">
-                          <div className="font-bold text-xl text-blue-900">${property.price.toLocaleString()}</div>
-                        </div>
-                        <div className="text-sm font-medium flex items-center mb-1 text-gray-700">
-                          <MapPin size={14} className="mr-1 text-blue-600" />
+                      {/* Property info */}
+                      <div className="p-5">
+                        <h3 className="font-bold text-lg text-slate-800 hover:text-indigo-600 transition-colors duration-300">
+                          {property.title}
+                        </h3>
+                        
+                        <div className="flex items-center mt-1 mb-3 text-slate-500 text-sm">
+                          <MapPin size={14} className="mr-1" />
                           {property.location}
                         </div>
-                        <div className="text-xs text-gray-600 mb-3">{property.address}</div>
                         
-                        <div className="text-sm text-gray-600 mb-4 h-16 overflow-hidden">
-                          {property.description}
-                        </div>
-                        
-                        <div className="flex justify-between text-xs text-gray-700 border-t pt-3">
-                          <div className="flex gap-4">
-                            {property.bedrooms >= 0 && (
-                              <div className="flex items-center gap-1">
-                                <div className="bg-blue-50 p-1 rounded">
-                                  <span className="text-blue-600">🛏️</span>
-                                </div>
-                                <span className="font-medium">{property.bedrooms}</span>
-                              </div>
-                            )}
-                            {property.bathrooms && (
-                              <div className="flex items-center gap-1">
-                                <div className="bg-blue-50 p-1 rounded">
-                                  <span className="text-blue-600">🚿</span>
-                                </div>
-                                <span className="font-medium">{property.bathrooms}</span>
-                              </div>
-                            )}
-                            {property.area && (
-                              <div className="flex items-center gap-1">
-                                <div className="bg-blue-50 p-1 rounded">
-                                  <span className="text-blue-600">📏</span>
-                                </div>
-                                <span className="font-medium">{property.area}</span>
-                              </div>
-                            )}
-                          </div>
-                          
-                          {property.lotSize && (
-                            <div className="flex items-center gap-1 bg-gray-100 px-2 py-1 rounded">
-                              <span>🏞️</span> <span className="font-medium">{property.lotSize}</span>
+                        {/* Property features */}
+                        <div className="flex gap-4 mb-4">
+                          {property.bedrooms >= 0 && (
+                            <div className="flex flex-col items-center px-3 py-2 bg-slate-50 rounded-lg">
+                              <span className="font-bold text-indigo-900">{property.bedrooms}</span>
+                              <span className="text-xs text-slate-500">Beds</span>
                             </div>
                           )}
+                          
+                          {property.bathrooms && (
+                            <div className="flex flex-col items-center px-3 py-2 bg-slate-50 rounded-lg">
+                              <span className="font-bold text-indigo-900">{property.bathrooms}</span>
+                              <span className="text-xs text-slate-500">Baths</span>
+                            </div>
+                          )}
+                          
+                          {property.area && (
+                            <div className="flex flex-col items-center px-3 py-2 bg-slate-50 rounded-lg">
+                              <span className="font-bold text-indigo-900">{property.area}</span>
+                              <span className="text-xs text-slate-500">Sq Ft</span>
+                            </div>
+                          )}
+                        </div>
+                        
+                        {/* Property description truncated */}
+                        <p className="text-slate-600 text-sm line-clamp-2 mb-4">
+                          {property.description}
+                        </p>
+                        
+                        {/* Status and type */}
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm font-medium px-3 py-1 bg-indigo-50 text-indigo-700 rounded-full">
+                            {property.status}
+                          </span>
+                          <span className="text-sm text-slate-500">
+                            {property.type}
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -502,138 +561,89 @@ export default function PropertySearch() {
                 )}
               </div>
             ) : (
-              <div className="bg-gray-100 rounded-lg h-96 flex items-center justify-center">
-                <p className="text-gray-500">Map view will be implemented with Google Maps or Mapbox</p>
+              <div className="bg-white rounded-2xl shadow-md h-96 flex items-center justify-center">
+                <p className="text-slate-500 flex flex-col items-center gap-3">
+                  <Map size={40} className="text-indigo-300" />
+                  Map view will be implemented soon
+                </p>
               </div>
             )}
-
-            {/* Property Advertisement */}
-            <div className="bg-gradient-to-r from-blue-100 to-indigo-100 p-4 mb-6 rounded-lg shadow-md">
-              <div className="text-blue-800 font-medium text-center">Premium Listings Available</div>
-            </div>
-
+            
             {/* Pagination */}
-            <div className="flex justify-between items-center mt-8 mb-6">
-              <div className="flex gap-3 items-center">
-                
-              </div>
-              
-              <div className="flex gap-2">
-                <button 
-                  className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full bg-white text-gray-400"
-                  disabled={currentPage === 1}
-                >
-                  <ChevronLeft size={16} />
+            <div className="mt-10 flex justify-center">
+              <div className="flex items-center gap-2 bg-white rounded-full shadow-md p-1">
+                <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-50 transition-colors">
+                  <ChevronLeft size={18} />
                 </button>
                 
-                {pageNumbers.map((num) => (
+                {[1, 2, 3, 4, 5].map(num => (
                   <button 
                     key={num}
-                    className={`w-10 h-10 flex items-center justify-center rounded-full ${currentPage === num ? 'bg-blue-600 text-white font-bold shadow-md' : 'bg-white border border-gray-300 hover:bg-blue-50 transition-colors duration-300'}`}
+                    className={`w-10 h-10 flex items-center justify-center rounded-full transition-all duration-300 
+                    ${currentPage === num ? 'bg-indigo-600 text-white font-medium shadow-md' : 'text-slate-600 hover:bg-slate-50'}`}
                     onClick={() => setCurrentPage(num)}
                   >
                     {num}
                   </button>
                 ))}
                 
-                <button className="px-3 text-gray-600 font-bold">...</button>
-                
-                <button className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full bg-white hover:bg-blue-50 transition-colors duration-300">
-                  8
+                <button className="flex items-center justify-center px-4 h-10 rounded-full text-slate-600 hover:bg-slate-50 transition-colors">
+                  ...
                 </button>
                 
-                <button 
-                  className="w-10 h-10 flex items-center justify-center border border-gray-300 rounded-full bg-white hover:bg-blue-50 transition-colors duration-300"
-                  onClick={() => currentPage < 5 && setCurrentPage(currentPage + 1)}
-                >
-                  <ChevronRight size={16} />
-                </button>
-                
-                <button 
-                  className="border border-gray-300 bg-white rounded-full px-4 py-2 text-sm font-medium hover:bg-blue-50 transition-colors duration-300 flex items-center"
-                  onClick={() => currentPage < 5 && setCurrentPage(currentPage + 1)}
-                >
-                  Next <ChevronRight size={14} className="ml-1" />
+                <button className="w-10 h-10 flex items-center justify-center rounded-full text-slate-600 hover:bg-slate-50 transition-colors">
+                  <ChevronRight size={18} />
                 </button>
               </div>
-            </div>
-          </div>
-           {/* Sidebar */}
-        <div className="w-full md:w-1/4">
-          <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-            <img src="/api/placeholder/320/200" alt="Les Habitations Entourages Inc." className="w-full mb-4 rounded-lg shadow-sm" />
-            <div className="flex flex-col gap-3">
-              <button className="bg-gradient-to-r from-gray-800 to-gray-900 text-white text-center py-3 rounded-full text-sm font-medium shadow-md hover:shadow-lg transition-all duration-300">View all properties by this builder</button>
-              <button className="border border-gray-300 text-center py-3 rounded-full text-sm font-medium hover:bg-gray-50 transition-colors duration-300">Go to the builder's website</button>
             </div>
           </div>
           
-          <div className="bg-white rounded-xl shadow-md p-6 mb-6">
-            <div className="flex items-center mb-4">
-              <h3 className="font-bold text-lg text-gray-800">Mortgage Calculator</h3>
-              <div className="ml-2 bg-blue-600 h-1 flex-grow rounded-full"></div>
-            </div>
-            
-            <div className="flex justify-between text-sm mb-3 bg-gray-50 p-3 rounded-lg">
-              <span className="text-gray-700">Mortgage Amount</span>
-              <div className="font-bold flex gap-1 items-center">
-                <span className="text-green-600">$230,000</span>
-                <div className="flex items-center gap-1 bg-green-100 px-2 py-1 rounded-full text-xs">
-                  <div className="h-2 w-2 bg-green-500 rounded-full"></div>
-                  <span className="text-green-800">Desjardins</span>
+          {/* Sidebar */}
+          <div className="w-full lg:w-80">
+            {/* Mortgage calculator */}
+            <div className="bg-white rounded-2xl shadow-md p-6 mb-6">
+              <h3 className="font-bold text-lg text-slate-800 mb-4 flex items-center">
+                <span className="bg-indigo-600 h-5 w-1 rounded mr-2"></span>
+                Mortgage Calculator
+              </h3>
+              
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm text-slate-600 mb-1">Purchase price ($)</label>
+                  <input 
+                    type="text" 
+                    value="540,000" 
+                    className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                  />
                 </div>
-              </div>
-            </div>
-            
-            <div className="flex justify-between text-sm mb-4 bg-gray-50 p-3 rounded-lg">
-              <span className="text-gray-700">Weekly Payment</span>
-              <span className="font-bold text-blue-800">$460</span>
-            </div>
-            
-            <div className="mb-5">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Purchase price ($)</span>
-                <Info size={14} className="text-gray-400 cursor-pointer hover:text-blue-600 transition-colors duration-300" />
-              </div>
-              <div className="flex items-center gap-2">
-                <input type="text" value="540000" className="border border-gray-300 rounded-lg p-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" />
-                <input type="range" className="w-full accent-blue-600" />
-              </div>
-            </div>
-            
-            <div className="mb-5">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Down payment ($)</span>
-                <Info size={14} className="text-gray-400 cursor-pointer hover:text-blue-600 transition-colors duration-300" />
-              </div>
-              <div className="flex items-center gap-2">
-                <input type="text" value="$80,000" className="border border-gray-300 rounded-lg p-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" />
-                <input type="range" className="w-full accent-blue-600" />
-              </div>
-            </div>
-            
-            <div className="mb-5">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Interest rate (%)</span>
-                <Info size={14} className="text-gray-400 cursor-pointer hover:text-blue-600 transition-colors duration-300" />
-              </div>
-              <div className="flex items-center gap-2">
-                <input type="text" value="5.50" className="border border-gray-300 rounded-lg p-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300" />
-                <input type="range" className="w-full accent-blue-600" />
-              </div>
-            </div>
-            
-            <div className="mb-5">
-              <div className="flex justify-between text-sm mb-2">
-                <span className="text-gray-700 font-medium">Amortization (years)</span>
-                <Info size={14} className="text-gray-400 cursor-pointer hover:text-blue-600 transition-colors duration-300" />
-              </div>
-              <select className="border border-gray-300 rounded-lg p-2 text-sm w-full focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300 bg-white">
-                <option>25 years</option>
-                <option>30 years</option>
-                <option>20 years</option>
-              </select>
-            </div>
+                
+                <div>
+                  <label className="block text-sm text-slate-600 mb-1">Down payment ($)</label>
+                  <input 
+                    type="text" 
+                    value="110,000" 
+                    className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-slate-600 mb-1">Interest rate (%)</label>
+                  <input 
+                    type="text" 
+                    value="4.75" 
+                    className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm text-slate-600 mb-1">Loan term (years)</label>
+                  <select className="w-full bg-slate-50 border-0 rounded-lg p-3 focus:ring-2 focus:ring-indigo-500 text-slate-800">
+                    <option>30 years</option>
+                    <option>25 years</option>
+                    <option>20 years</option>
+                    <option>15 years</option>
+                  </select>
+                </div>
             
             <div className="mb-5">
               <div className="flex justify-between text-sm mb-2">
@@ -668,7 +678,7 @@ export default function PropertySearch() {
         </div>
       </div>
       </div>
-
+</main>
     </div>
   );
 }
