@@ -161,7 +161,7 @@ const Business = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-xl opacity-50 group-hover:opacity-100 transition duration-300 blur"></div>
               <div className="relative bg-white rounded-xl overflow-hidden">
                 <div className="h-48 overflow-hidden">
-                  <img src="/contactimg.png" alt="Dedicated team" className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" />
+                  <img src="/contactimg.jpg" alt="Dedicated team" className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" />
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-xl mb-3 text-gray-800">Dedicated Team</h3>
@@ -175,7 +175,7 @@ const Business = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-indigo-600 to-blue-600 rounded-xl opacity-50 group-hover:opacity-100 transition duration-300 blur"></div>
               <div className="relative bg-white rounded-xl overflow-hidden">
                 <div className="h-48 overflow-hidden">
-                  <img src="/contactimage.png" alt="Pre-marketing setup" className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" />
+                  <img src="/contactimg.jpg" alt="Pre-marketing setup" className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" />
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-xl mb-3 text-gray-800">Pre-Marketing Setup</h3>
@@ -189,7 +189,7 @@ const Business = () => {
               <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-cyan-600 rounded-xl opacity-50 group-hover:opacity-100 transition duration-300 blur"></div>
               <div className="relative bg-white rounded-xl overflow-hidden">
                 <div className="h-48 overflow-hidden">
-                  <img src="/contactimage.png" alt="Contact center" className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" />
+                  <img src="/contactimg.jpg" alt="Contact center" className="w-full h-full object-cover transform group-hover:scale-110 transition duration-700" />
                 </div>
                 <div className="p-6">
                   <h3 className="font-bold text-xl mb-3 text-gray-800">Responsive Contact Center</h3>
